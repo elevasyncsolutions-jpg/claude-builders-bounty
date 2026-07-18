@@ -21,49 +21,40 @@ src/
 ```
 
 ## Conventions
-- Server Components by default; 'use client' only when needed (interactivity, context, hooks)
-- Server Actions in `src/actions/`, one file per domain
-- Database queries in `src/db/queries/`, never inline in components
-- Shared Zod schemas in `src/lib/schemas/`, validated on both client and server
-- All environment variables via `src/lib/env.ts` using `@t3-oss/env-nextjs`
-- No barrel exports (`index.ts`) — explicit imports only
+- Server Components by default; 'use client' only when needed
+- Server Actions in src/actions/, one file per domain
+- DB queries in src/db/queries/, never inline in components
+- Shared Zod schemas in src/lib/schemas/, validated on both sides
+- Env vars via src/lib/env.ts using @t3-oss/env-nextjs
+- No barrel exports — explicit imports only
 
 ## Naming
-- Files: `kebab-case.ts`
-- Components: `PascalCase.tsx`
-- Functions/variables: `camelCase`
-- Database tables: `snake_case`
-- Types/interfaces: `PascalCase` with `Type` suffix for complex types
-- Server action files: `domain.actions.ts`
+- Files: kebab-case.ts
+- Components: PascalCase.tsx
+- Functions/variables: camelCase
+- DB tables: snake_case
+- Types: PascalCase with Type suffix
 
 ## Database Rules
-- All queries use Drizzle prepared statements (never raw SQL)
+- All queries use Drizzle prepared statements
 - Migrations are generated, never hand-written
-- Foreign keys enforced via `foreignKey()` in schema
-- Soft deletes via `deletedAt` column where applicable
-- Pagination via cursor-based (not offset) for performance
+- Foreign keys enforced via foreignKey() in schema
+- Soft deletes via deletedAt column
+- Cursor-based pagination
 
 ## Dev Workflow
-```bash
-npm run dev          # Start dev server
-npm run db:generate  # Generate Drizzle migrations
-npm run db:push      # Push schema to local SQLite
-npm run db:studio    # Drizzle Studio GUI
-npm run lint         # ESLint + Prettier check
-npm run typecheck    # tsc --noEmit
-npm run test         # Vitest
-```
+npm run dev, npm run db:generate, npm run db:push, npm run lint, npm run typecheck, npm run test
 
-## Anti-patterns to Avoid
-- ❌ `useEffect` for data fetching — use Server Components or Server Actions
-- ❌ Wrapping everything in try/catch in Server Actions — use `ActionState` return type
-- ❌ Storing sessions in SQLite — use NextAuth's built-in JWT strategy
-- ❌ Direct database access from components — always go through queries layer
-- ❌ Large client bundles — use dynamic imports with `next/dynamic`
+## Anti-patterns
+- No useEffect for data fetching
+- No direct DB access from components
+- No barrel exports
+- No large client bundles without dynamic imports
+- No raw SQL
 
 ## Security
-- All user input validated via Zod before reaching database
-- CSRF protection via Next.js Server Actions (built-in)
-- Rate limiting on auth routes via `upstash-rate-limiter`
-- SQLite WAL mode for concurrent reads
-- Stripe webhook signatures verified on every event
+- All input validated via Zod
+- CSRF via Server Actions (built-in)
+- Rate limiting on auth routes
+- SQLite WAL mode
+- Stripe webhook signature verification
