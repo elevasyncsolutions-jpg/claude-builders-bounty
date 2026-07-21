@@ -1,22 +1,22 @@
-# Changelog Generator
+# CHANGELOG Generator
 
-Generates a structured `CHANGELOG.md` from git history.
+Auto-generates `CHANGELOG.md` from git history, categorized by type.
 
-## Usage
+## Setup
 
 ```bash
-bash generate-changelog.sh [output-file]
+# 1. Copy to your project
+cp changelog.sh /path/to/your/project/
+
+# 2. Make executable
+chmod +x changelog.sh
+
+# 3. Run
+./changelog.sh
 ```
 
-Default output: `CHANGELOG.md`
+## Output
 
-## How it works
+Categories: `Added`, `Fixed`, `Changed`, `Removed` — auto-detected from commit messages.
 
-- Fetches commits since the last git tag
-- Auto-categorizes into: Added / Fixed / Changed / Removed / Documentation / Security / Performance
-- Outputs a properly formatted `CHANGELOG.md`
-
-## Requirements
-
-- `git`
-- A repository with at least one tag
+Conventional commit prefixes (`feat:`, `fix:`, etc.) are supported. Non-prefixed commits go to `Changed`.
